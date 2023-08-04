@@ -8,13 +8,17 @@
   <title>Autenticação</title>
 </head>
 <body>
-  <form action="/logar" class="formulario" method="post">
-    <label for="fname">Usuario:</label>
-    <input type="text" id="usuario" name="" placeholder="coloque seu nome aqui"><br>
-    <label for="lname">Senha:</label>
-    <input type="text" id="senha" name="" placeholder="coloque sua senha aqui"><br><br>
-    <button type="submit">Enviar</button>
-  </form> 
+  <div class="page">
+        <form method="POST" class="formLogin" action="/logar">
+            <h1>Conecte-se</h1>
+            <p>Digite os seus dados de acesso no campo abaixo.</p>
+            <label for="email">E-mail</label>
+            <input type="email" placeholder="Digite seu e-mail" autofocus="true" />
+            <label for="password">Senha</label>
+            <input type="password" placeholder="Digite sua senha" />
+            <input type="submit" value="Acessar" class="btn" />
+        </form>
+    </div>
    
 </body>
 </html>
