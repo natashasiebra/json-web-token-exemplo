@@ -12,7 +12,9 @@ border: 2px solid;
   padding: 150px; 
   width: 200px;
   resize: horizontal;
-  overflow: auto;
+  border-radius: 20px;
+  background-color: 
+  #ff00668e;
   font-size: 30px;
 }
 input{

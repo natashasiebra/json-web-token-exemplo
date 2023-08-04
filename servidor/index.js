@@ -37,6 +37,7 @@ app.get('/', async function(req, res){
 })
 
 app.post('/logar', (req, res) => {
+  res.send('você esta logado')
   
 })
 
