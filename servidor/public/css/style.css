@@ -1,3 +1,31 @@
 body {
-  background-color: aquamarine;
+  background-color: #ff4dd2;
+  background-image: url(https://wallpapers.com/images/hd/pearl-barbie-mermaid-and-pink-seahorse-fhand1roe0vo4tth.jpg);
+}
+.formulario{
+
+  font-family:'sans-serif';
+  background-color: white;
+margin-left: 70%;
+margin-top: 10%;
+border: 2px solid;
+  padding: 150px; 
+  width: 200px;
+  resize: horizontal;
+  overflow: auto;
+  font-size: 30px;
+}
+input{
+  font-size: 15px;
+  padding: 10px 5px;
+  border-radius: 15px;
+}
+button{
+  font-size: 15px;
+  padding: 10px 15px;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  background-color:  #ff4dd2;
+  border-color: rgba(0, 0, 0, 0);
+  color: white;
 }
