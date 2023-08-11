@@ -37,8 +37,22 @@ app.get('/', async function(req, res){
 })
 
 app.post('/logar', (req, res) => {
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+  let usuario = req.body.usuario
+  let senha = req.body.senha
+
+  if(usuario === "natasha@logar" && senha === "2006" ){
+    res.send('vc foi logado')
+  }else{
+    res.send('erro ao tentar logar')
+  }
+=======
+>>>>>>> Stashed changes
   res.send('você esta logado')
   
+>>>>>>> ddee0f1ffb4bfe1b4687089a5bbdf1244b03f3b9
 })
 
 app.post('/deslogar', function(req, res) {
