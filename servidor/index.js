@@ -43,7 +43,7 @@ app.post('/logar', (req, res) => {
   if(usuario === "natasha@logar" && senha === "2006" ){
     res.send('você foi logado')
   }else{
-    res.send('vc nao foi possivel logar')
+    res.send('vc não foi possivel logar')
   } 
 })
 
