@@ -8,6 +8,7 @@ var cookieParser = require('cookie-parser')
 
 const express = require('express');
 const { usuario } = require('./models');
+const { json } = require("body-parser");
 
 const app = express();
 
@@ -25,7 +26,7 @@ app.use(
     secret: process.env.SECRET,
     algorithms: ["HS256"],
     getToken: req => req.cookies.token
-  }).unless({ path: ["/autenticar", "/logar", "/deslogar", "/"] })
+  }).unless({ path: ["/autenticar", "/logar", "/deslogar",] })
 );
 
 app.get('/autenticar', async function(req, res){
@@ -41,14 +42,23 @@ app.post('/logar', (req, res) => {
   let senha = req.body.senha
 
   if(usuario === "natasha@logar" && senha === "2006" ){
-    res.send('você foi logado')
-  }else{
-    res.send('vc não foi possivel logar')
-  } 
+   const id = 1;
+   const token = jwt.sign({id}, process.env.SECRET, {
+    expiresIn:300
+   })
+   res.cookie('logar', token, {httpOnly: true})
+   return res.json({
+    usuario: usuario,
+    token: token
+   })
+
+  }
+  res.status(500).json({mensagem: " voê não foi logado"})
 })
 
 app.post('/deslogar', function(req, res) {
-  
+  res.cookie('logar', null, {httpOnly: true})
+  res.json({deslogado:true})
 })
 
 app.listen(3000, function() {
