@@ -26,11 +26,15 @@ app.use(
     secret: process.env.SECRET,
     algorithms: ["HS256"],
     getToken: req => req.cookies.token
-  }).unless({ path: ["/autenticar", "/logar", "/deslogar",] })
+  }).unless({ path: ["/autenticar", "/logar", "/deslogar", "/usuarios/cadastrar"] })
 );
 
 app.get('/autenticar', async function(req, res){
   res.render('autenticar');
+})
+
+app.get('/usuarios/cadastrar', async function(req,res){
+  res.render('cadastrar')
 })
 
 app.get('/', async function(req, res){
@@ -60,6 +64,7 @@ app.post('/deslogar', function(req, res) {
   res.cookie('logar', null, {httpOnly: true})
   res.json({deslogado:true})
 })
+
 
 app.listen(3000, function() {
   console.log('App de Exemplo escutando na porta 3000!')
