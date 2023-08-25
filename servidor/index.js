@@ -1,4 +1,6 @@
 // JWT
+
+
 require("dotenv-safe").config();
 const jwt = require('jsonwebtoken');
 var { expressjwt: expressJWT } = require("express-jwt");
@@ -8,7 +10,9 @@ var cookieParser = require('cookie-parser')
 
 const express = require('express');
 const { usuario } = require('./models');
-const { json } = require("body-parser");
+
+
+
 
 const app = express();
 
@@ -29,17 +33,30 @@ app.use(
   }).unless({ path: ["/autenticar", "/logar", "/deslogar", "/usuarios/cadastrar"] })
 );
 
-app.get('/autenticar', async function(req, res){
-  res.render('autenticar');
+app.get('/usuario/cadastrar', async function(req, res){
+  res.render('cadastrar');
 })
 
-app.get('/usuarios/cadastrar', async function(req,res){
-  res.render('cadastrar')
+app.get('/usuario/listar', async function(req, res){
+  res.render('listar');
+})
+
+app.post('/usuario/cadastrar', async function(req, res){
+
+if (req.body.senha === req.body.confirmeS)
+      res.json({mensagem:"conseguiu"})
+    else(
+      res.json({mensagem:"vc não conseguiu"})
+    )} ) 
+    
+app.get('/autenticar', async function(req, res){
+  res.render('autenticar');
 })
 
 app.get('/', async function(req, res){
   res.render("home")
 })
+
 
 app.post('/logar', (req, res) => {
   let usuario = req.body.usuario
