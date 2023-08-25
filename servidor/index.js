@@ -28,7 +28,7 @@ app.use(
     secret: process.env.SECRET,
     algorithms: ["HS256"],
     getToken: req => req.cookies.token
-  }).unless({ path: ["/autenticar", "/logar", "/deslogar", "/usuario/cadastrar"] })
+  }).unless({ path: ["/autenticar", "/logar", "/deslogar", "/usuario/cadastrar", "/usuario/listar"] })
 );
 
 app.get('/usuario/cadastrar', async function(req, res){
@@ -81,7 +81,7 @@ app.post('/deslogar', function(req, res) {
 app.post('/usuario/cadastrar', async function(req, res){
  if(req.body.senha == req.body.confirme){
   await usuario.create(req.body)
-  res.redirect('usuario/listar')
+  res.redirect('/usuario/listar')
   req.json("cadastro feito com sucesso")
  }else{
   res.status(500).json("senha incorreta") 
@@ -91,6 +91,17 @@ app.get('/', async function(req,res){
   try{
     var usuarios = await usuario.findAll();
     req.render('home', {usuarios});
+
+  }catch(err){
+    console.log(err);
+    res.status(500).json({mensagem: 'ocorreu um erro ao buscar os usuarios'})
+  }
+})
+
+app.get('/usuario/listar', async function(req,res){
+  try{
+    var usuarios = await usuario.findAll();
+    req.render('listar', {usuarios});
 
   }catch(err){
     console.log(err);
