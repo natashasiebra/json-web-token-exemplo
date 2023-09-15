@@ -1,3 +1,11 @@
+const crypto = require('./crypto');
+
+const encrypted_key = crypto.encrypt("natasha");
+console.log(encrypted_key);
+const decrypted_key = crypto.decrypt(encrypted_key);
+console.log(decrypted_key);
+
+
 // JWT
 require("dotenv-safe").config(); // Carrega variáveis de ambiente do arquivo .env
 const jwt = require('jsonwebtoken'); // Importa a biblioteca 'jsonwebtoken' para trabalhar com tokens JWT
@@ -32,17 +40,12 @@ app.get('/usuario/cadastrar', async function(req, res){
   res.render('cadastrar'); // Renderiza a página 'cadastrar'
 })
 
-app.get('/usuario/listar', async function(req, res){
-  res.render('listar'); // Renderiza a página 'listar'
-})
+app.get('/usuario/listar', async function(req,res){
+  var usuarios = await usuario.findAll(); // Recupera todos os usuários do banco de dados
+  res.render('listar/listar', {usuarios}); // Renderiza a página 'listar' com a lista de usuários
+});
 
-app.post('/usuario/cadastrar', async function(req, res){
-  
-  if (req.body.password === req.body.confirmeS)
-    res.json({mensagem:"conseguiu"}); // Retorna uma resposta JSON se a senha coincidir com a confirmação
-  else
-    res.json({mensagem:"vc não conseguiu"}); // Retorna uma resposta JSON se a senha não coincidir
-}) 
+
 
 app.get('/autenticar', async function(req, res){
   res.render('autenticar'); // Renderiza a página 'autenticar'
@@ -78,8 +81,8 @@ app.post('/deslogar', function(req, res) {
 app.post('/usuario/cadastrar', async function(req, res){
  if(req.body.senha == req.body.confirme){
   await usuario.create(req.body); // Cria um novo usuário com base nos dados do corpo da solicitação
-  res.redirect('/usuario/listar'); // Redireciona para a página de listar usuários após o cadastro bem-sucedido
-  req.json("cadastro feito com sucesso"); // Retorna uma resposta JSON com uma mensagem de sucesso
+  res.redirect('/listar/listar'); // Redireciona para a página de listar usuários após o cadastro bem-sucedido
+  res.json("cadastro feito com sucesso"); // Retorna uma resposta JSON com uma mensagem de sucesso
  }else{
   res.status(500).json("senha incorreta"); // Retorna um erro se a senha não coincidir com a confirmação
 }})
@@ -94,17 +97,6 @@ app.get('/', async function(req,res){
     res.status(500).json({mensagem: 'ocorreu um erro ao buscar os usuarios'}); // Retorna um erro se a busca de usuários falhar
   }
 })
-
-app.get('/usuario/listar', async function(req,res){
-  try{
-    var usuarios = await usuario.findAll(); // Recupera todos os usuários do banco de dados
-    req.render('listar', {usuarios}); // Renderiza a página 'listar' com a lista de usuários
-
-  }catch(err){
-    console.log(err);
-    res.status(500).json({mensagem: 'ocorreu um erro ao buscar os usuarios'}); // Retorna um erro se a busca de usuários falhar
-  }
-});
 
 app.listen(3000, function() {
   console.log('App de Exemplo escutando na porta 3000!'); // Inicia o servidor na porta 3000

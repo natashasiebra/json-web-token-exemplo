@@ -7,12 +7,9 @@
   <title>Document</title>
 </head>
 <body>
-
-  <form action="/usuario/listar" method="get">
     <% usuarios.forEach((usuario) => { %>
         <%= usuario.nome %>
         <%= usuario.senha %>
     <% }) %>
-  </form>
 </body>
 </html>
