@@ -64,7 +64,7 @@ app.post('/logar', (req, res) => {
    const token = jwt.sign({id}, process.env.SECRET, {
     expiresIn:300 // Gera um token JWT com uma duração de 300 segundos (5 minutos)
    });
-   res.cookie('logar', token, {httpOnly: true}); // Define um cookie 'logar' com o token JWT
+   res.cookie('token', token, {httpOnly: true}); // Define um cookie 'logar' com o token JWT
    return res.json({
     usuario: usuario,
     token: token // Retorna o token JWT e informações do usuário em uma resposta JSON
@@ -81,7 +81,7 @@ app.post('/deslogar', function(req, res) {
 app.post('/usuario/cadastrar', async function(req, res){
  if(req.body.senha == req.body.confirme){
   await usuario.create(req.body); // Cria um novo usuário com base nos dados do corpo da solicitação
-  res.redirect('listar'); // Redireciona para a página de listar usuários após o cadastro bem-sucedido
+  res.redirect('/usuario/listar'); // Redireciona para a página de listar usuários após o cadastro bem-sucedido
   res.json("cadastro feito com sucesso"); // Retorna uma resposta JSON com uma mensagem de sucesso
  }else{
   res.status(500).json("senha incorreta"); // Retorna um erro se a senha não coincidir com a confirmação
