@@ -42,7 +42,7 @@ app.get('/usuario/cadastrar', async function(req, res){
 
 app.get('/usuario/listar', async function(req,res){
   var usuarios = await usuario.findAll(); // Recupera todos os usuários do banco de dados
-  res.render('listar/listar', {usuarios}); // Renderiza a página 'listar' com a lista de usuários
+  res.render('listar', {usuarios}); // Renderiza a página 'listar' com a lista de usuários
 });
 
 
@@ -81,7 +81,7 @@ app.post('/deslogar', function(req, res) {
 app.post('/usuario/cadastrar', async function(req, res){
  if(req.body.senha == req.body.confirme){
   await usuario.create(req.body); // Cria um novo usuário com base nos dados do corpo da solicitação
-  res.redirect('/listar/listar'); // Redireciona para a página de listar usuários após o cadastro bem-sucedido
+  res.redirect('listar'); // Redireciona para a página de listar usuários após o cadastro bem-sucedido
   res.json("cadastro feito com sucesso"); // Retorna uma resposta JSON com uma mensagem de sucesso
  }else{
   res.status(500).json("senha incorreta"); // Retorna um erro se a senha não coincidir com a confirmação
