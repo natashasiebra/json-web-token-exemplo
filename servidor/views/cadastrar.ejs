@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,17 +10,18 @@
 <body>
   <div class="page">
 
-    <form method="POST" class="formLogin" action="/logar">
+    <form method="POST" class="formLogin" action="/usuario/cadastrar">
         <h1>Conecte-se</h1>
         <p>Digite os seus dados de acesso no campo abaixo.</p>
-        <label for="text">E-mail</label>
-        <input type="text" name="usuario" placeholder="Digite seu e-mail"  />
+        <label for="text">Nome</label>
+        <input type="text" name="nome" placeholder="Digite seu e-mail"  />
         <label for="password">Senha</label>
         <input type="password" name="senha" placeholder="Digite sua senha" />
         <label for="password">Confirmar Senha</label>
-        <input type="password" name="senha" placeholder="Confirme sua senha" />
+        <input type="password" name="confirme" placeholder="Confirme sua senha" />
         <input type="submit" value="Acessar" class="btn" />
     </form>
+  
 </div>
 
 </body>

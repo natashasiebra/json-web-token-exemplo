@@ -1,71 +1,103 @@
+const crypto = require('./crypto');
+
+const encrypted_key = crypto.encrypt("natasha");
+console.log(encrypted_key);
+const decrypted_key = crypto.decrypt(encrypted_key);
+console.log(decrypted_key);
+
+
 // JWT
-require("dotenv-safe").config();
-const jwt = require('jsonwebtoken');
-var { expressjwt: expressJWT } = require("express-jwt");
-const cors = require('cors');
+require("dotenv-safe").config(); // Carrega variáveis de ambiente do arquivo .env
+const jwt = require('jsonwebtoken'); // Importa a biblioteca 'jsonwebtoken' para trabalhar com tokens JWT
+var { expressjwt: expressJWT } = require("express-jwt"); // Importa o middleware 'express-jwt' para autenticação com JWT
+const cors = require('cors'); // Importa a biblioteca 'cors' para lidar com Cross-Origin Resource Sharing (CORS)
+var cookieParser = require('cookie-parser'); // Importa a biblioteca 'cookie-parser' para análise de cookies
 
-var cookieParser = require('cookie-parser')
+const express = require('express'); // Importa o framework Express.js
+const { usuario } = require('./models'); // Importa o modelo 'usuario' (possivelmente um modelo de banco de dados)
 
-const express = require('express');
-const { usuario } = require('./models');
-const { json } = require("body-parser");
+const app = express(); // Cria uma instância do aplicativo Express
 
-const app = express();
+app.set('view engine', 'ejs'); // Configura o mecanismo de visualização como EJS
 
-app.set('view engine', 'ejs');
+app.use(cors()); // Habilita o CORS para permitir solicitações de origens diferentes
 
-app.use(cors());
+app.use(express.json()); // Middleware para analisar solicitações JSON
+app.use(express.urlencoded({ extended: true })); // Middleware para analisar dados de formulário codificados
+app.use(express.static('public')); // Middleware para servir arquivos estáticos da pasta 'public'
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true}));
-app.use(express.static('public'));
-
-app.use(cookieParser());
+app.use(cookieParser()); // Middleware para analisar cookies
 app.use(
   expressJWT({
-    secret: process.env.SECRET,
-    algorithms: ["HS256"],
-    getToken: req => req.cookies.token
-  }).unless({ path: ["/autenticar", "/logar", "/deslogar", "/usuarios/cadastrar"] })
+    secret: process.env.SECRET, // Configura a chave secreta para verificar tokens JWT
+    algorithms: ["HS256"], // Configura o algoritmo de assinatura JWT
+    getToken: req => req.cookies.token // Define como obter o token JWT do cookie 'token'
+  }).unless({ path: ["/autenticar", "/logar", "/deslogar", "/usuario/cadastrar", "/usuario/listar"] })
+  // Define exceções para autenticação JWT, ou seja, caminhos que não exigem token JWT
 );
 
-app.get('/autenticar', async function(req, res){
-  res.render('autenticar');
+app.get('/usuario/cadastrar', async function(req, res){
+  res.render('cadastrar'); // Renderiza a página 'cadastrar'
 })
 
-app.get('/usuarios/cadastrar', async function(req,res){
-  res.render('cadastrar')
+app.get('/usuario/listar', async function(req,res){
+  var usuarios = await usuario.findAll(); // Recupera todos os usuários do banco de dados
+  res.render('listar', {usuarios}); // Renderiza a página 'listar' com a lista de usuários
+});
+
+
+
+app.get('/autenticar', async function(req, res){
+  res.render('autenticar'); // Renderiza a página 'autenticar'
 })
 
 app.get('/', async function(req, res){
-  res.render("home")
+  res.render("home"); // Renderiza a página 'home'
 })
 
 app.post('/logar', (req, res) => {
-  let usuario = req.body.usuario
-  let senha = req.body.senha
+  let usuario = req.body.usuario;
+  let senha = req.body.senha;
 
-  if(usuario === "natasha@logar" && senha === "2006" ){
+  if(usuario == "natasha@logar.com" && senha == "2006" ){
    const id = 1;
    const token = jwt.sign({id}, process.env.SECRET, {
-    expiresIn:300
-   })
-   res.cookie('logar', token, {httpOnly: true})
+    expiresIn:300 // Gera um token JWT com uma duração de 300 segundos (5 minutos)
+   });
+   res.cookie('token', token, {httpOnly: true}); // Define um cookie 'logar' com o token JWT
    return res.json({
     usuario: usuario,
-    token: token
-   })
-
+    token: token // Retorna o token JWT e informações do usuário em uma resposta JSON
+   });
   }
-  res.status(500).json({mensagem: " voê não foi logado"})
+  res.status(500).json({mensagem: "você não foi logado"}); // Retorna um erro se a autenticação falhar
 })
 
 app.post('/deslogar', function(req, res) {
-  res.cookie('logar', null, {httpOnly: true})
-  res.json({deslogado:true})
+  res.cookie('logar', null, {httpOnly: true}); // Remove o cookie 'logar' para deslogar o usuário
+  res.json({deslogado:true}); // Retorna uma resposta JSON indicando que o usuário foi deslogado
 })
 
+app.post('/usuario/cadastrar', async function(req, res){
+ if(req.body.senha == req.body.confirme){
+  await usuario.create(req.body); // Cria um novo usuário com base nos dados do corpo da solicitação
+  res.redirect('/usuario/listar'); // Redireciona para a página de listar usuários após o cadastro bem-sucedido
+  res.json("cadastro feito com sucesso"); // Retorna uma resposta JSON com uma mensagem de sucesso
+ }else{
+  res.status(500).json("senha incorreta"); // Retorna um erro se a senha não coincidir com a confirmação
+}})
+
+app.get('/', async function(req,res){
+  try{
+    var usuarios = await usuario.findAll(); // Recupera todos os usuários do banco de dados
+    req.render('home', {usuarios}); // Renderiza a página 'home' com a lista de usuários
+
+  }catch(err){
+    console.log(err);
+    res.status(500).json({mensagem: 'ocorreu um erro ao buscar os usuarios'}); // Retorna um erro se a busca de usuários falhar
+  }
+})
 
 app.listen(3000, function() {
-  console.log('App de Exemplo escutando na porta 3000!')
-});
+  console.log('App de Exemplo escutando na porta 3000!'); // Inicia o servidor na porta 3000
+})
