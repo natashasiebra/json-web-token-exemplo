@@ -41,8 +41,14 @@ app.get('/usuario/cadastrar', async function(req, res){
 })
 
 app.get('/usuario/listar', async function(req,res){
-  var usuarios = await usuario.findAll(); // Recupera todos os usuários do banco de dados
-  res.render('listar', {usuarios}); // Renderiza a página 'listar' com a lista de usuários
+  try{
+  var servidor = await usuario.findAll(); // Recupera todos os usuários do banco de dados
+  res.render('listar', {servidor}); // Renderiza a página 'listar' com a lista de usuários
+
+}catch (err) {
+  console.error(err);
+  res.status(500).json({ message: 'Ocorreu um erro ao buscar os usuário.' });
+}
 });
 
 
@@ -65,7 +71,7 @@ app.post('/logar', async (req, res) => {
    });
    res.cookie('token', token, {httpOnly: true}); // Define um cookie 'logar' com o token JWT
    return res.json({
-    usuario: usuario,
+    usuario: req.body.usuario,
     token: token // Retorna o token JWT e informações do usuário em uma resposta JSON
    });
   }
@@ -77,26 +83,23 @@ app.post('/deslogar', function(req, res) {
   res.json({deslogado:true}); // Retorna uma resposta JSON indicando que o usuário foi deslogado
 })
 
+  
+
 app.post('/usuario/cadastrar', async function(req, res){
-<<<<<<< HEAD
  if(req.body.senha == req.body.confirme){
-  await usuario.create(req.body); // Cria um novo usuário com base nos dados do corpo da solicitação
-  res.redirect('/usuario/listar'); // Redireciona para a página de listar usuários após o cadastro bem-sucedido
- // Retorna uma resposta JSON com uma mensagem de sucesso
- }else{
-  res.status(500).json("senha incorreta"); // Retorna um erro se a senha não coincidir com a confirmação
-=======
-  try {
-    let name = req.body
-    name.senha = crypto.encrypt( req.body.senha)
-    await usuario.create(name);
-    res.redirect('/usuario/listar')
-   
+  try { 
+    const crypt = {
+      nome: req.body.nome,
+      senha: crypto.encrypt(req.body.senha)
+    }
+    if(req.body.senha == req.body.confirme){
+      const servidor = await usuario.create(crypt);
+      res.redirect('/usuario/listar')
+    }
 } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Ocorreu um erro ao criar o usuário.' });
->>>>>>> b9abf514d89c1fa2e175c83e78ac61d640bc30a9
-}})
+    res.status(500).json({ message: 'A senha esta errada' });
+}}})
 
 app.get('/', async function(req,res){
   try{
