@@ -1,6 +1,6 @@
 const crypto = require('./crypto');
 
-const encrypted_key = crypto.encrypt("natasha");
+const encrypted_key = crypto.encrypt("HelloWorld");
 console.log(encrypted_key);
 const decrypted_key = crypto.decrypt(encrypted_key);
 console.log(decrypted_key);
@@ -55,11 +55,10 @@ app.get('/', async function(req, res){
   res.render("home"); // Renderiza a página 'home'
 })
 
-app.post('/logar', (req, res) => {
-  let usuario = req.body.usuario;
-  let senha = req.body.senha;
+app.post('/logar', async (req, res) => {
+  const u = await usuario.findOne({ where: { nome: req.body.nome, senha:crypto.encrypt( req.body.senha) } });
 
-  if(usuario == "natasha@logar.com" && senha == "2006" ){
+  if(u){
    const id = 1;
    const token = jwt.sign({id}, process.env.SECRET, {
     expiresIn:300 // Gera um token JWT com uma duração de 300 segundos (5 minutos)
@@ -79,12 +78,24 @@ app.post('/deslogar', function(req, res) {
 })
 
 app.post('/usuario/cadastrar', async function(req, res){
+<<<<<<< HEAD
  if(req.body.senha == req.body.confirme){
   await usuario.create(req.body); // Cria um novo usuário com base nos dados do corpo da solicitação
   res.redirect('/usuario/listar'); // Redireciona para a página de listar usuários após o cadastro bem-sucedido
  // Retorna uma resposta JSON com uma mensagem de sucesso
  }else{
   res.status(500).json("senha incorreta"); // Retorna um erro se a senha não coincidir com a confirmação
+=======
+  try {
+    let name = req.body
+    name.senha = crypto.encrypt( req.body.senha)
+    await usuario.create(name);
+    res.redirect('/usuario/listar')
+   
+} catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Ocorreu um erro ao criar o usuário.' });
+>>>>>>> b9abf514d89c1fa2e175c83e78ac61d640bc30a9
 }})
 
 app.get('/', async function(req,res){
