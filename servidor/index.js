@@ -82,7 +82,7 @@ app.post('/usuario/cadastrar', async function(req, res){
  if(req.body.senha == req.body.confirme){
   await usuario.create(req.body); // Cria um novo usuário com base nos dados do corpo da solicitação
   res.redirect('/usuario/listar'); // Redireciona para a página de listar usuários após o cadastro bem-sucedido
-  res.json("cadastro feito com sucesso"); // Retorna uma resposta JSON com uma mensagem de sucesso
+ // Retorna uma resposta JSON com uma mensagem de sucesso
  }else{
   res.status(500).json("senha incorreta"); // Retorna um erro se a senha não coincidir com a confirmação
 }})
