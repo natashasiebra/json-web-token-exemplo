@@ -32,7 +32,7 @@ app.use(
     secret: process.env.SECRET, // Configura a chave secreta para verificar tokens JWT
     algorithms: ["HS256"], // Configura o algoritmo de assinatura JWT
     getToken: req => req.cookies.token // Define como obter o token JWT do cookie 'token'
-  }).unless({ path: ["/autenticar", "/logar", "/deslogar", "/usuario/cadastrar", "/usuario/listar"] })
+  }).unless({ path: ["/autenticar", "/logar", "/deslogar", ] })
   // Define exceções para autenticação JWT, ou seja, caminhos que não exigem token JWT
 );
 
@@ -79,7 +79,7 @@ app.post('/logar', async (req, res) => {
 })
 
 app.post('/deslogar', function(req, res) {
-  res.cookie('logar', null, {httpOnly: true}); // Remove o cookie 'logar' para deslogar o usuário
+  res.cookie('token', null, {httpOnly: true}); // Remove o cookie 'logar' para deslogar o usuário
   res.json({deslogado:true}); // Retorna uma resposta JSON indicando que o usuário foi deslogado
 })
 
