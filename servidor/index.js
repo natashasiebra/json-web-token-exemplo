@@ -17,16 +17,18 @@ const corsOptions = {
     allowedHeaders : "Content-Type, Authorization",
     creadentials: true,
 }
-app.use(cors(corsOptions))
+
 
 var cookieParser = require('cookie-parser'); // Importa a biblioteca 'cookie-parser' para análise de cookies
 
 const express = require('express');
-app.use(cors(corsOptions))
+
  // Importa o framework Express.js
 const { usuario } = require('./models'); // Importa o modelo 'usuario' (possivelmente um modelo de banco de dados)
 
 const app = express(); // Cria uma instância do aplicativo Express
+
+app.use(cors(corsOptions))
 
 app.set('view engine', 'ejs'); // Configura o mecanismo de visualização como EJS
 
