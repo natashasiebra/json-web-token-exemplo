@@ -4,13 +4,21 @@ const encrypted_key = crypto.encrypt("HelloWorld");
 console.log(encrypted_key);
 const decrypted_key = crypto.decrypt(encrypted_key);
 console.log(decrypted_key);
-
-
 // JWT
 require("dotenv-safe").config(); // Carrega variáveis de ambiente do arquivo .env
 const jwt = require('jsonwebtoken'); // Importa a biblioteca 'jsonwebtoken' para trabalhar com tokens JWT
 var { expressjwt: expressJWT } = require("express-jwt"); // Importa o middleware 'express-jwt' para autenticação com JWT
 const cors = require('cors'); // Importa a biblioteca 'cors' para lidar com Cross-Origin Resource Sharing (CORS)
+const corsOptions = {
+  //aonde o cliente pode acesar.
+    origin: "http://localhost:3000",
+   //metodos que o cliente pode fazer.
+    methods: "GET, PUT, POST, DELETE",
+    allowedHeaders : "Content-Type, Authorization",
+    creadentials: true,
+}
+app.use(cors(corsOptions))
+
 var cookieParser = require('cookie-parser'); // Importa a biblioteca 'cookie-parser' para análise de cookies
 
 const express = require('express'); // Importa o framework Express.js
@@ -43,15 +51,13 @@ app.get('/usuario/cadastrar', async function(req, res){
 app.get('/usuario/listar', async function(req,res){
   try{
   var servidor = await usuario.findAll(); // Recupera todos os usuários do banco de dados
-  res.render('listar', {servidor}); // Renderiza a página 'listar' com a lista de usuários
+  res.json(servidor); // Renderiza a página 'listar' com a lista de usuários
 
 }catch (err) {
   console.error(err);
   res.status(500).json({ message: 'Ocorreu um erro ao buscar os usuário.' });
 }
 });
-
-
 
 app.get('/autenticar', async function(req, res){
   res.render('autenticar'); // Renderiza a página 'autenticar'
@@ -69,11 +75,14 @@ app.post('/logar', async (req, res) => {
    const token = jwt.sign({id}, process.env.SECRET, {
     expiresIn:300 // Gera um token JWT com uma duração de 300 segundos (5 minutos)
    });
-   res.cookie('token', token, {httpOnly: true}); // Define um cookie 'logar' com o token JWT
-   return res.json({
-    usuario: req.body.usuario,
-    token: token // Retorna o token JWT e informações do usuário em uma resposta JSON
-   });
+   res.cookie('token', token, {httpOnly: true}).json({
+    nome: u.nome,
+    token: token,
+   }); // Define um cookie 'logar' com o token JWT
+  // return res.json({
+   // usuario: req.body.usuario,
+    //token: token // Retorna o token JWT e informações do usuário em uma resposta JSON
+  // });
   }
   res.status(500).json({mensagem: "você não foi logado"}); // Retorna um erro se a autenticação falhar
 })
