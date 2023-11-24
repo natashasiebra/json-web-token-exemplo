@@ -1,45 +1,55 @@
-
 'use client'
-import "./style.css"
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import './style.css';
+import { useState } from "react";
+import { postUser } from "@/app/functions/handlerAcessAPI";
+import { useRouter } from 'next/navigation';
 
-const UserForm = () => {
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-     toast.success('Vingador registrado com sucesso ')
-    // Verifique se onSubmit é uma função antes de chamá-la
-    
+export default function Register(){
+  const [user, setUser] =useState({
+    name:'',
+    email: '',
+    password: ''
+  });
+
+  const {push} = useRouter();
+
+  const handlerFormSubmit = async (event) => {
+    event.preventDefault();
+
+    try{
+      await postUser(user);
+      return push("/pages/dashboard");
+    } catch{
+      return toast.error("Erro");
     }
-  return (
-    <div>
-      <form onSubmit={handleSubmit}>
-      <div class="avatar"> </div>
-      <h1>Registrar</h1>
-      <div className="input">
-      <input 
+  }
+
+
+    return (
+      <div>
+        <h1>Cadastrar</h1>
+        <form onSubmit={handlerFormSubmit}>
+        <input
           placeholder='Nome'
-          type="Nome"
-         ></input>
+          type="name"
+          onChange={(e) => { setUser({ ...user, name: e.target.value }) }}>
+        </input>
         <input
           placeholder='E-mail'
           type="email"
-         >
+          onChange={(e) => { setUser({ ...user, email: e.target.value }) }}>
         </input>
         <input
           placeholder='Senha'
           type='password'
-          >
+          onChange={(e) => { setUser({ ...user, password: e.target.value }) }}>
         </input>
-        </div>
-        <button class="button-64"  ><span class="text">Salvar</span></button>
-        <button class="button-65"><span class="text"><a href="/pages/dashboard">Voltar</a></span></button>
-     
-      </form>
-      <ToastContainer/>
-    </div>
-  );
-};
-
-export default UserForm;
+          <button>Cadastrar</button>
+          <ToastContainer/>
+        </form>
+      </div>
+    )
+  }
 
