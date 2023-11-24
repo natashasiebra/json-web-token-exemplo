@@ -3,7 +3,7 @@
 import { cookies } from "next/dist/client/components/headers";
 
 
-const url = "https://servidor-zeta.vercel.app"
+const url = "http://localhost:4000"
 
 
 const getUserAuthenticated = async (user) => {

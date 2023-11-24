@@ -56,7 +56,6 @@ app.get('/usuario/listar', async function(req,res){
   try{
   var servidor = await usuario.findAll(); // Recupera todos os usuários do banco de dados
   res.json(servidor); // Renderiza a página 'listar' com a lista de usuários
-
 }catch (err) {
   console.error(err);
   res.status(500).json({ message: 'Ocorreu um erro ao buscar os usuário.' });
@@ -71,7 +70,7 @@ app.get('/', async function(req, res){
   res.render("home"); // Renderiza a página 'home'
 })
 
-app.post('/logar', async (req, res) => {
+app.post('/user/authenticated', async (req, res) => {
   const u = await usuario.findOne({ where: { nome: req.body.nome, senha:crypto.encrypt( req.body.senha) } });
 
   if(u){
@@ -125,6 +124,6 @@ app.get('/', async function(req,res){
   }
 })
 
-app.listen(3000, function() {
-  console.log('App de Exemplo escutando na porta 3000!'); // Inicia o servidor na porta 3000
+app.listen(4000, function() {
+  console.log('App de Exemplo escutando na porta 4000!'); // Inicia o servidor na porta 3000
 })

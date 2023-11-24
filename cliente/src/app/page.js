@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 export default function Login() {
   const [user, setUser] = useState({
-    email: '',
+    nome: '',
     password: '',
   });
   const { push, refresh} = useRouter();
@@ -18,7 +18,7 @@ export default function Login() {
     try {
       const userAuth = await handlerAcessUser(user);
       if(userAuth.token === undefined){
-        toast.error("Erro no e-mail ou senha!")
+        toast.error("Erro no nome ou senha!")
       }
       push('/pages/dashboard');
     } catch {
@@ -33,9 +33,9 @@ export default function Login() {
       </div>
       <h1>Entrar</h1>
         <input
-          placeholder='E-mail'
-          type="email"
-          onChange={(e) => { setUser({ ...user, email: e.target.value }) }}>
+          placeholder='name'
+          type="name"
+          onChange={(e) => { setUser({ ...user, nome: e.target.value }) }}>
         </input>
         <input
           placeholder='Senha'
