@@ -7,6 +7,7 @@ const url = "http://localhost:4000"
 
 
 const getUserAuthenticated = async (user) => {
+    console.log(user)
     try{
     const responseOfApi = await fetch(url +"/user/authenticated",
     {
