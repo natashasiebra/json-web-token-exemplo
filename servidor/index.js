@@ -31,8 +31,7 @@ const app = express(); // Cria uma instância do aplicativo Express
 app.use(cors(corsOptions))
 
 app.set('view engine', 'ejs'); // Configura o mecanismo de visualização como EJS
-
-app.use(cors()); // Habilita o CORS para permitir solicitações de origens diferentes
+ // Habilita o CORS para permitir solicitações de origens diferentes
 
 app.use(express.json()); // Middleware para analisar solicitações JSON
 app.use(express.urlencoded({ extended: true })); // Middleware para analisar dados de formulário codificados
@@ -44,7 +43,7 @@ app.use(
     secret: process.env.SECRET, // Configura a chave secreta para verificar tokens JWT
     algorithms: ["HS256"], // Configura o algoritmo de assinatura JWT
     getToken: req => req.cookies.token // Define como obter o token JWT do cookie 'token'
-  }).unless({ path: ["/autenticar", "/logar", "/deslogar", ] })
+  }).unless({ path: ["/autenticar", "/user/authenticated", "/deslogar", ] })
   // Define exceções para autenticação JWT, ou seja, caminhos que não exigem token JWT
 );
 
@@ -78,7 +77,7 @@ app.post('/user/authenticated', async (req, res) => {
    const token = jwt.sign({id}, process.env.SECRET, {
     expiresIn:300 // Gera um token JWT com uma duração de 300 segundos (5 minutos)
    });
-   res.cookie('token', token, {httpOnly: true}).json({
+   return res.cookie('token', token, {httpOnly: true}).json({
     nome: u.nome,
     token: token,
    }); // Define um cookie 'logar' com o token JWT

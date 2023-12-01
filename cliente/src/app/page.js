@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css'
 export default function Login() {
   const [user, setUser] = useState({
     nome: '',
-    password: '',
+    senha: '',
   });
   const { push, refresh} = useRouter();
 
@@ -40,7 +40,7 @@ export default function Login() {
         <input
           placeholder='Senha'
           type='password'
-          onChange={(e) => { setUser({ ...user, password: e.target.value }) }}>
+          onChange={(e) => { setUser({ ...user, senha: e.target.value }) }}>
         </input>
         <button class="button-64"  ><span class="text">Entrar</span></button>
       </form>
