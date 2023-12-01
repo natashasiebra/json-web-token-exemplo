@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 
 export default function Register(){
   const [user, setUser] =useState({
-    name:'',
+    nome:'',
     senha: '',
     confirme:'',
   });
@@ -34,15 +34,15 @@ export default function Register(){
         <input
           placeholder='Nome'
           type="name"
-          onChange={(e) => { setUser({ ...user, name: e.target.value }) }}>
+          onChange={(e) => { setUser({ ...user, nome: e.target.value }) }}>
         </input>
         <input
-          placeholder='E-mail'
+          placeholder='Senha'
           type="password"
           onChange={(e) => { setUser({ ...user, senha: e.target.value }) }}>
         </input>
         <input
-          placeholder='Senha'
+          placeholder='Confirma senha'
           type='password'
           onChange={(e) => { setUser({ ...user, confirme: e.target.value }) }}>
         </input>

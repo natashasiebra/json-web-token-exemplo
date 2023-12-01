@@ -34,7 +34,7 @@ const getUsers = async () =>{
 
         });
         const listUsers = await responseOfApi.json();
-
+        console.log(listUsers)
         return listUsers
     }catch{
         return null;
@@ -49,10 +49,12 @@ const getUsers = async () =>{
             const responseOfApi = await fetch(url + "/usuario/cadastrar", {
                 method: "POST",
                 headers: { 'Content-Type': 'Application/json',
-                Cookie:`token=${token}`,},
+                Cookie:`token=${token}`
+            },
                 body: JSON.stringify(user)
             });
             const userSave = await responseOfApi.json();
+            console.log(userSave)
             return userSave;
         }catch{
            return null;

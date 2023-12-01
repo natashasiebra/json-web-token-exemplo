@@ -14,7 +14,6 @@ export default async  function Dashboard() {
             <ListUser class="lista" users={users}/>
             </div>
             <div class="alterar">
-            <button class="button-64" role="button" ><span class="text"><a href="/pages/alterar">Alterar</a></span></button>
             <button class="button-65" role="button" ><span class="text"><a href="/pages/registrar">Registrar</a></span></button>
             </div>
            </Suspense>
